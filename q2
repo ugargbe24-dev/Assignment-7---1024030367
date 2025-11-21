@@ -1,0 +1,69 @@
+#include <iostream>
+using namespace std;
+
+// ----------------------------------------------------------
+// IMPROVED (BIDIRECTIONAL) SELECTION SORT
+// ----------------------------------------------------------
+void improvedSelectionSort(int a[], int n) {
+    int left = 0, right = n - 1;
+
+    while (left < right) {
+        int minIndex = left;
+        int maxIndex = left;
+
+        // Find minimum and maximum in this pass
+        for (int i = left; i <= right; i++) {
+            if (a[i] < a[minIndex]) minIndex = i;
+            if (a[i] > a[maxIndex]) maxIndex = i;
+        }
+
+        // Swap minimum with the left side
+        int temp = a[left];
+        a[left] = a[minIndex];
+        a[minIndex] = temp;
+
+        // If maxIndex was at left, it moved to minIndex after swap
+        if (maxIndex == left)
+            maxIndex = minIndex;
+
+        // Swap maximum with the right side
+        temp = a[right];
+        a[right] = a[maxIndex];
+        a[maxIndex] = temp;
+
+        // Move boundaries inward
+        left++;
+        right--;
+    }
+}
+
+// ----------------------------------------------------------
+// PRINT ARRAY
+// ----------------------------------------------------------
+void printArray(int a[], int n) {
+    for (int i = 0; i < n; i++)
+        cout << a[i] << " ";
+    cout << endl;
+}
+
+// ----------------------------------------------------------
+// MAIN PROGRAM
+// ----------------------------------------------------------
+int main() {
+    int n;
+    cout << "Enter number of elements: ";
+    cin >> n;
+
+    int arr[n];
+
+    cout << "Enter array elements:\n";
+    for (int i = 0; i < n; i++)
+        cin >> arr[i];
+
+    improvedSelectionSort(arr, n);
+
+    cout << "\nArray after Improved Selection Sort:\n";
+    printArray(arr, n);
+
+    return 0;
+}
