@@ -1,0 +1,172 @@
+#include <iostream>
+using namespace std;
+// ------------------------------------------------------
+// SELECTION SORT
+// ------------------------------------------------------
+void selectionSort(int a[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int minIndex = i;
+        for (int j = i + 1; j < n; j++) {
+            if (a[j] < a[minIndex])
+                minIndex = j;
+        }
+        int t = a[i];
+        a[i] = a[minIndex];
+        a[minIndex] = t;
+    }
+}
+// ------------------------------------------------------
+// INSERTION SORT
+// ------------------------------------------------------
+void insertionSort(int a[], int n) {
+    for (int i = 1; i < n; i++) {
+        int key = a[i];
+        int j = i - 1;
+
+        while (j >= 0 && a[j] > key) {
+            a[j + 1] = a[j];
+            j--;
+        }
+        a[j + 1] = key;
+    }
+}
+// ------------------------------------------------------
+// BUBBLE SORT
+// ------------------------------------------------------
+void bubbleSort(int a[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (a[j] > a[j + 1]) {
+                int t = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = t;
+            }
+        }
+    }
+}
+// ------------------------------------------------------
+// MERGE SORT HELPERS
+// ------------------------------------------------------
+void merge(int a[], int low, int mid, int high) {
+    int n1 = mid - low + 1;
+    int n2 = high - mid;
+    int L[n1], R[n2];
+    for (int i = 0; i < n1; i++)
+        L[i] = a[low + i];
+    for (int i = 0; i < n2; i++)
+        R[i] = a[mid + 1 + i];
+    int i = 0, j = 0, k = low;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j])
+            a[k++] = L[i++];
+        else
+            a[k++] = R[j++];
+    }
+    while (i < n1) a[k++] = L[i++];
+    while (j < n2) a[k++] = R[j++];
+}
+void mergeSort(int a[], int low, int high) {
+    if (low < high) {
+        int mid = (low + high) / 2;
+        mergeSort(a, low, mid);
+        mergeSort(a, mid + 1, high);
+        merge(a, low, mid, high);
+    }
+}
+// ------------------------------------------------------
+// QUICK SORT HELPERS
+// ------------------------------------------------------
+int partition(int a[], int low, int high) {
+    int pivot = a[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (a[j] < pivot) {
+            i++;
+            int t = a[i];
+            a[i] = a[j];
+            a[j] = t;
+        }
+    }
+    int t = a[i + 1];
+    a[i + 1] = a[high];
+    a[high] = t;
+
+    return i + 1;
+}
+void quickSort(int a[], int low, int high) {
+    if (low < high) {
+        int p = partition(a, low, high);
+        quickSort(a, low, p - 1);
+        quickSort(a, p + 1, high);
+    }
+}
+// ------------------------------------------------------
+// PRINT ARRAY
+// ------------------------------------------------------
+void printArray(int a[], int n) {
+    for (int i = 0; i < n; i++)
+        cout << a[i] << " ";
+    cout << endl;
+}
+// ------------------------------------------------------
+// MAIN MENU
+// ------------------------------------------------------
+int main() {
+    int choice;
+    int n;
+    cout << "Enter number of elements: ";
+    cin >> n;
+    int arr[n];
+
+    cout << "Enter array elements:\n";
+    for (int i = 0; i < n; i++)
+        cin >> arr[i];
+    do {
+        cout << "\n==== SORTING MENU ====\n";
+        cout << "1. Selection Sort\n";
+        cout << "2. Insertion Sort\n";
+        cout << "3. Bubble Sort\n";
+        cout << "4. Merge Sort\n";
+        cout << "5. Quick Sort\n";
+        cout << "6. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+        int tempArr[n];
+        for (int i = 0; i < n; i++)
+            tempArr[i] = arr[i];  // copy original array each time
+        switch (choice) {
+            case 1:
+                selectionSort(tempArr, n);
+                cout << "Sorted using Selection Sort:\n";
+                printArray(tempArr, n);
+                break;
+            case 2:
+                insertionSort(tempArr, n);
+                cout << "Sorted using Insertion Sort:\n";
+                printArray(tempArr, n);
+                break;
+            case 3:
+                bubbleSort(tempArr, n);
+                cout << "Sorted using Bubble Sort:\n";
+                printArray(tempArr, n);
+                break;
+            case 4:
+                mergeSort(tempArr, 0, n - 1);
+                cout << "Sorted using Merge Sort:\n";
+                printArray(tempArr, n);
+                break;
+            case 5:
+                quickSort(tempArr, 0, n - 1);
+                cout << "Sorted using Quick Sort:\n";
+                printArray(tempArr, n);
+                break;
+            case 6:
+                cout << "Exiting...\n";
+                break;
+            default:
+                cout << "Invalid choice! Try again.\n";
+        }
+    } while (choice != 6);
+    return 0;
+}
